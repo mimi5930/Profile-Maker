@@ -1,5 +1,7 @@
 const inqurier = require('inquirer');
 
+var manager;
+
 // Prompt Manager
 const createManager = () => {
    return inqurier
@@ -47,9 +49,44 @@ const createManager = () => {
             }
         }
     ])
+    .then(obj => {
+        manager = obj
+    });
 };
 
-// TODO Then prompt whether they'd like to enter in an intern, engineer or finish building my team
+const promptNewMember = () => {
+    return inqurier.prompt([
+        {
+            type: 'list',
+            name: 'memberConfirm',
+            message: 'Would you like to add an intern, engineer, or finish building your team?',
+            choices: ['intern', 'engineer', 'finish building team']
+        }
+    ])
+}
+
+const newMemberHandler = confirm => {
+    if ( confirm === 'intern'){
+        console.log('intern')
+    } else if (confirm === 'engineer') {
+        console.log('engineer');
+    } else {
+        console.log('finish');
+    }
+}
+
+// const internCreate = teamArr => {
+//     if (!teamArr) {
+//         teamArr = [];
+//     }
+//     return inqurier
+//     .prompt([
+//         {
+
+//         }
+//     ])
+// }
+
 // TODO: Engineer: engineer’s name, ID, email, and GitHub username, and I am taken back to the menu
 // TODO: Intern: intern’s name, ID, email, and school, and I am taken back to the menu
 // TODO: finish building my team
@@ -66,6 +103,8 @@ Please enter info about your team below!
 
 welcomeMessage();
 createManager()
+.then(promptNewMember)
 .then( answer => {
-    console.log(answer);
+    console.log(manager);
+    newMemberHandler(answer.memberConfirm);
 });
