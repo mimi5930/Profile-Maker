@@ -1,6 +1,6 @@
 const inqurier = require('inquirer');
+const Team = require('./lib/Team');
 
-var manager;
 
 // Prompt Manager
 const createManager = () => {
@@ -18,7 +18,7 @@ const createManager = () => {
                     if (answer % 1 === 0) {
                         return true;
                     } else {
-                        console.log('Please enter a whole number digit')
+                        console.log('Please enter a whole number')
                         return false;
                     }
                 } else {
@@ -32,7 +32,7 @@ const createManager = () => {
             message: `Please enter the manager's email`
         },
         {
-            name: 'ManagerOfficeNumber',
+            name: 'managerOfficeNumber',
             message: `Please enter the manager's office number`,
             validate: answer => {
                 if (parseInt(answer)) {
@@ -48,14 +48,16 @@ const createManager = () => {
                 }
             }
         }
-    ])
-    .then(obj => {
-        manager = obj
-    });
+    ]);
 };
 
-const promptNewMember = () => {
-    return inqurier.prompt([
+const promptNewMember = (manager) => {
+    if (!team) {
+        var team = manager;
+        console.log(team);
+    }
+    return inqurier
+    .prompt([
         {
             type: 'list',
             name: 'memberConfirm',
@@ -63,29 +65,55 @@ const promptNewMember = () => {
             choices: ['intern', 'engineer', 'finish building team']
         }
     ])
+    .then(answer => {
+        newMemberHandler(answer.memberConfirm, team);
+    });
 }
 
-const newMemberHandler = confirm => {
-    if ( confirm === 'intern'){
+const newMemberHandler = (confirm, team) => {
+    if (confirm === 'intern') {
         console.log('intern')
     } else if (confirm === 'engineer') {
-        console.log('engineer');
+        return createEngineer(team);
     } else {
         console.log('finish');
+        return team;
     }
 }
 
-// const internCreate = teamArr => {
-//     if (!teamArr) {
-//         teamArr = [];
-//     }
-//     return inqurier
-//     .prompt([
-//         {
-
-//         }
-//     ])
-// }
+const createEngineer = team => {
+    if (!team.teamMembers) {
+        team.teamMembers = [];
+    }
+    inqurier
+    .prompt([
+        {
+            name: 'name',
+            message: `What is the engineer's name?`
+        }, 
+        {
+            name: 'ID',
+            message: `What is the engineer's ID?`
+        },
+        {
+            name: `email`,
+            message: `What is the engineer's email address?`
+        },
+        {
+            name: 'gitHub',
+            message: `what is the engineer's GitHub username?`
+        }
+    ])
+    .then(obj => {
+        let { name, ID, email, gitHub } = obj;
+        let member = new Team(name, ID, email);
+        member.addEngineer(gitHub);
+        console.log(member);
+        team.teamMembers.push(member);
+        console.log(team);
+        return team;
+    })
+}
 
 // TODO: Engineer: engineer’s name, ID, email, and GitHub username, and I am taken back to the menu
 // TODO: Intern: intern’s name, ID, email, and school, and I am taken back to the menu
@@ -103,8 +131,9 @@ Please enter info about your team below!
 
 welcomeMessage();
 createManager()
-.then(promptNewMember)
-.then( answer => {
-    console.log(manager);
-    newMemberHandler(answer.memberConfirm);
+.then(manager => {
+    promptNewMember(manager);
 });
+// .then(team => {
+//     if (team.)
+// });
