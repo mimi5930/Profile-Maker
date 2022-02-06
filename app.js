@@ -53,8 +53,9 @@ const createManager = () => {
     ])
     .then(managerObj => {
        let { managerName, managerID, managerEmail, managerOfficeNumber } = managerObj;
-       let manager = new Manager(managerName, managerID, managerEmail, managerOfficeNumber);
+       let member = new Manager(managerName, managerID, managerEmail, managerOfficeNumber);
        var team = []
+       let manager = employeeObj(member);
        team.push(manager);
        return team;
     });
@@ -72,7 +73,6 @@ const promptNewMember = (team) => {
     ])
     .then(answer => {
         let { memberConfirm } = answer;
-        console.log(memberConfirm);
         if (memberConfirm === 'intern') {
             return createIntern(team);
         } else if (memberConfirm === 'engineer') {
@@ -114,7 +114,8 @@ const createEngineer = team => {
         let { name, ID, email, gitHub } = obj;
         let member = new Engineer(name, ID, email, gitHub);
         team.noNewMembers = false;
-        team.push(member);
+        let engineer = employeeObj(member);
+        team.push(engineer);
         return team;
     })
 }
@@ -142,11 +143,42 @@ const createIntern = team => {
     .then(obj => {
         let { name, ID, email, school } = obj;
         let member = new Intern(name, ID, email, school);
-        team.push(member);
-        console.log(team);
+        let intern = employeeObj(member);
+        team.push(intern);
         return team;
     })
 }
+
+
+const employeeObj = employee => {
+    let role = employee.getRole();
+    if (role === 'manager') {
+        let obj = {};
+        obj.name = employee.getName();
+        obj.id = employee.getId();
+        obj.email = employee.getEmail();
+        obj.role = role;
+        obj.officeNumber = employee.officeNumber;
+        return obj;
+    } else if (role === 'intern') {
+        let obj = {};
+        obj.name = employee.getName();
+        obj.id = employee.getId();
+        obj.email = employee.getEmail();
+        obj.role = role;
+        obj.officeNumber = employee.getSchool();
+        return obj;
+    } else if (role === 'engineer') {
+        let obj = {};
+        obj.name = employee.getName();
+        obj.id = employee.getId();
+        obj.email = employee.getEmail();
+        obj.role = role;
+        obj.github = employee.getGithub();
+        return obj;
+    }
+}
+
 
 // TODO: prompt HTML generation
 
