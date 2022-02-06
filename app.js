@@ -71,23 +71,26 @@ const promptNewMember = (team) => {
         }
     ])
     .then(answer => {
-        return newMemberHandler(answer.memberConfirm, team);
+        let { memberConfirm } = answer;
+        console.log(memberConfirm);
+        if (memberConfirm === 'intern') {
+            return createIntern(team);
+        } else if (memberConfirm === 'engineer') {
+            return createEngineer(team);
+        } else if (memberConfirm === 'finish building team') {
+            team.noNewMembers = true;
+            return team;
+        }
+    })
+    .then(team => {
+        if (!team.noNewMembers) {
+            return promptNewMember(team);
+        }
+        return team;
     });
 }
 
-const newMemberHandler = (confirm, team) => {
-    if (confirm === 'intern') {
-        return createIntern(team);
-    } else if (confirm === 'engineer') {
-        return createEngineer(team);
-    } else {
-        team.noNewMembers = true;
-        return team;
-    }
-}
-
 const createEngineer = team => {
-    team.noNewMembers = false;
     return inqurier
     .prompt([
         {
@@ -110,14 +113,13 @@ const createEngineer = team => {
     .then(obj => {
         let { name, ID, email, gitHub } = obj;
         let member = new Engineer(name, ID, email, gitHub);
+        team.noNewMembers = false;
         team.push(member);
-        console.log(team);
         return team;
     })
 }
 
 const createIntern = team => {
-    team.noNewMembers = false;
     return inqurier
     .prompt([
         {
@@ -163,9 +165,5 @@ createManager()
     return promptNewMember(team);
 })
 .then(team => {
-    if (!team.noNewMembers) {
-        return promptNewMember(team);
-    } else {
-        return console.log(team);
-    }
+    return console.log(team);
 });
