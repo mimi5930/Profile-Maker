@@ -54,13 +54,13 @@ const createManager = () => {
     .then(managerObj => {
        let { managerName, managerID, managerEmail, managerOfficeNumber } = managerObj;
        let manager = new Manager(managerName, managerID, managerEmail, managerOfficeNumber);
-       return manager;
+       var team = []
+       team.push(manager);
+       return team;
     });
 };
 
-const promptNewMember = (currentTeam) => {
-    var team = [];
-    team.push(currentTeam);
+const promptNewMember = (team) => {
     return inqurier
     .prompt([
         {
@@ -77,7 +77,7 @@ const promptNewMember = (currentTeam) => {
 
 const newMemberHandler = (confirm, team) => {
     if (confirm === 'intern') {
-        console.log('intern')
+        return createIntern(team);
     } else if (confirm === 'engineer') {
         return createEngineer(team);
     } else {
@@ -116,6 +116,36 @@ const createEngineer = team => {
     })
 }
 
+const createIntern = team => {
+    team.noNewMembers = false;
+    return inqurier
+    .prompt([
+        {
+            name: 'name',
+            message: `What is the intern's name?`
+        }, 
+        {
+            name: 'ID',
+            message: `What is the intern's ID?`
+        },
+        {
+            name: `email`,
+            message: `What is the intern's email address?`
+        },
+        {
+            name: 'school',
+            message: `what school did the intern attend?`
+        }
+    ])
+    .then(obj => {
+        let { name, ID, email, school } = obj;
+        let member = new Intern(name, ID, email, school);
+        team.push(member);
+        console.log(team);
+        return team;
+    })
+}
+
 // TODO: Engineer: engineer’s name, ID, email, and GitHub username, and I am taken back to the menu
 // TODO: Intern: intern’s name, ID, email, and school, and I am taken back to the menu
 // TODO: finish building my team
@@ -132,8 +162,8 @@ Please enter info about your team below!
 
 welcomeMessage();
 createManager()
-.then(manager => {
-    return promptNewMember(manager);
+.then(team => {
+    return promptNewMember(team);
 })
 .then(team => {
     if (!team.noNewMembers) {
