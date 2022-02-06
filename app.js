@@ -1,5 +1,7 @@
 const inqurier = require('inquirer');
-const Team = require('./lib/Team');
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
 
 
 // Prompt Manager
@@ -48,14 +50,17 @@ const createManager = () => {
                 }
             }
         }
-    ]);
+    ])
+    .then(managerObj => {
+       let { managerName, managerID, managerEmail, managerOfficeNumber } = managerObj;
+       let manager = new Manager(managerName, managerID, managerEmail, managerOfficeNumber);
+       return manager;
+    });
 };
 
-const promptNewMember = (manager) => {
-    if (!team) {
-        var team = manager;
-        console.log(team);
-    }
+const promptNewMember = (currentTeam) => {
+    var team = [];
+    team.push(currentTeam);
     return inqurier
     .prompt([
         {
@@ -66,7 +71,7 @@ const promptNewMember = (manager) => {
         }
     ])
     .then(answer => {
-        newMemberHandler(answer.memberConfirm, team);
+        return newMemberHandler(answer.memberConfirm, team);
     });
 }
 
@@ -76,16 +81,14 @@ const newMemberHandler = (confirm, team) => {
     } else if (confirm === 'engineer') {
         return createEngineer(team);
     } else {
-        console.log('finish');
+        team.noNewMembers = true;
         return team;
     }
 }
 
 const createEngineer = team => {
-    if (!team.teamMembers) {
-        team.teamMembers = [];
-    }
-    inqurier
+    team.noNewMembers = false;
+    return inqurier
     .prompt([
         {
             name: 'name',
@@ -106,16 +109,13 @@ const createEngineer = team => {
     ])
     .then(obj => {
         let { name, ID, email, gitHub } = obj;
-        let member = new Team(name, ID, email);
-        member.addEngineer(gitHub);
-        console.log(member);
-        team.teamMembers.push(member);
+        let member = new Engineer(name, ID, email, gitHub);
+        team.push(member);
         console.log(team);
         return team;
     })
 }
 
-// !FIX TO INCORPORATE NEW CLASSES!!
 // TODO: Engineer: engineer’s name, ID, email, and GitHub username, and I am taken back to the menu
 // TODO: Intern: intern’s name, ID, email, and school, and I am taken back to the menu
 // TODO: finish building my team
@@ -133,8 +133,12 @@ Please enter info about your team below!
 welcomeMessage();
 createManager()
 .then(manager => {
-    promptNewMember(manager);
+    return promptNewMember(manager);
+})
+.then(team => {
+    if (!team.noNewMembers) {
+        return promptNewMember(team);
+    } else {
+        return console.log(team);
+    }
 });
-// .then(team => {
-//     if (team.)
-// });
