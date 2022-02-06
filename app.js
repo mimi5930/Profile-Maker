@@ -146,9 +146,6 @@ const createIntern = team => {
     })
 }
 
-// TODO: Engineer: engineer’s name, ID, email, and GitHub username, and I am taken back to the menu
-// TODO: Intern: intern’s name, ID, email, and school, and I am taken back to the menu
-// TODO: finish building my team
 // TODO: prompt HTML generation
 
 const welcomeMessage = () => {
