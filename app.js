@@ -1,4 +1,6 @@
 const inqurier = require('inquirer');
+const { pageTemplate } = require('./src/page-template');
+const { createHTML, copyCSS } = require('./utils/generate-site');
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
@@ -197,5 +199,13 @@ createManager()
     return promptNewMember(team);
 })
 .then(team => {
-    return console.log(team);
-});
+    return pageTemplate(team);
+})
+.then(html => {
+    copyCSS();
+    return createHTML(html);
+})
+.catch(error => {
+    console.log(error);
+})
+

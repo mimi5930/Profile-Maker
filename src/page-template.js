@@ -1,36 +1,4 @@
-// test array
-var teamArr = [
-    {
-        name: 'Bill',
-        id: '1',
-        email: 'bill@example.com',
-        role: 'manager',
-        officeNumber: '3'
-    },
-    {
-        name: 'Jen',
-        id: '2',
-        email: 'jen@example.com',
-        role: 'engineer',
-        github: 'jen-codes'
-    },
-    {
-        name: 'Jack',
-        id: '3',
-        email: 'jack@example.com',
-        role: 'engineer',
-        github: 'jack-codes'
-    },
-    {
-        name: 'Lexi',
-        id: '4',
-        email: 'lexi@example.com',
-        role: 'intern',
-        school: 'school example'
-    }
-]
-
-const teamOrganizer = teamArr => {
+const pageTemplate = teamArr => {
     let manager;
     let engineerArr = [];
     let internArr = [];
@@ -50,13 +18,18 @@ const teamOrganizer = teamArr => {
         }
     }
 
-    pageGenerator(manager, engineerArr, internArr);
+    return pageGenerator(manager, engineerArr, internArr);
 }
 
 const pageGenerator = (manager, engineerArr, internArr) => {
-
-let engineerString = engineerArr.toString().replace(',', '\n');
-let internString = internArr.toString().replace(',', '\n');
+let engineerString = engineerArr.toString()
+let internString = internArr.toString();
+if (engineerArr.length > 1) {
+    engineerString.replace(',', '\n');
+}
+if (internArr.length > 1) {
+    internString.replace(',', '\n');
+}
 
 const page = `
 <!DOCTYPE html>
@@ -145,5 +118,4 @@ const internSection = obj => {
     return internhtml;
 }
 
-// TODO: when email address is clicked, default email program opens and populates the TO field of the email with the address
-// TODO: clicking on GitHub Username opens profile in new tab
+module.exports = { pageTemplate }

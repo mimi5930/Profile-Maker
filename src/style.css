@@ -1,1 +1,26 @@
-/* TODO: Add Style to the HTML */
+* {
+    font-family: 'IBM Plex Sans Thai Looped', sans-serif;
+}
+
+.title-header {
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.card-title,
+.card-subtitle {
+    text-align: center;
+}
+
+.card-title{
+    font-weight: bold;
+}
+
+h3 {
+    padding-bottom: 15px;
+}
+.team-members .card {
+    width: 18rem;
+    margin: 5px;
+}
