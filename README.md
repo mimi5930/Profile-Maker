@@ -6,7 +6,7 @@ Profile Maker is a node.js application that accepts user input through the comma
 * Clone the main branch from [Github](https://github.com/mimi5930/Team-Profile-Generator)
 * Install node package manager.
 > npm install
-*Run app.js in the terminal
+* Run app.js in the terminal
 > node app
 
 ## Usage
