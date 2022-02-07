@@ -31,21 +31,34 @@ var teamArr = [
 ]
 
 const teamOrganizer = teamArr => {
+    let manager;
+    let engineerArr = [];
+    let internArr = [];
+
     for (i = 0; i < teamArr.length; i++) {
         let role = teamArr[i].role;
         if (role === 'manager') {
-            let managerhtml = managerSection(teamArr[i]);
+            manager = managerSection(teamArr[i]);
         }
         if (role === 'engineer') {
-            let engineerhtml = engineerSection(teamArr[i]);
+            let engineer = engineerSection(teamArr[i]);
+            engineerArr.push(engineer);
         }
         if (role === 'intern') {
-            let internhtml = internSection()
+            let intern = internSection(teamArr[i]);
+            internArr.push(intern);
         }
     }
+
+    pageGenerator(manager, engineerArr, internArr);
 }
 
-const page =`
+const pageGenerator = (manager, engineerArr, internArr) => {
+
+let engineerString = engineerArr.toString().replace(',', '\n');
+let internString = internArr.toString().replace(',', '\n');
+
+const page = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,14 +77,18 @@ const page =`
         <h1 class="title-header justify-content-center">Team Profile Generator</h1>
     </header>
 
-    ${managerhtml}
+    ${manager}
 
     <section class="team-members container d-flex justify-content-around">
-    ${engineerhtml}
-    ${internhtml}
+    ${engineerString}
+    ${internString}
     </section>
 </body>
 `
+return page;
+}
+
+
 const managerSection = obj => {
 let {name, id, email, officeNumber} = obj;
 let managerhtml = `
