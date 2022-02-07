@@ -19,15 +19,17 @@ const createHTML = content => {
 
 // copy style sheet
 const copyCSS = () => {
-    fs.copyFile('./src/style.css', './dist/style.css', err => {
-        if (err) {
-            reject(err);
-            return;
-        }
-
-        resolve({
-            ok: true,
-            message: 'CSS created!'
+    return new Promise((resolve, reject) => {
+        fs.copyFile('./src/style.css', './dist/style.css', err => {
+            if (err) {
+                reject(err);
+                return;
+            }
+    
+            resolve({
+                ok: true,
+                message: 'CSS created!'
+            });
         });
     });
 };

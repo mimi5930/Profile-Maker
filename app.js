@@ -168,7 +168,7 @@ const employeeObj = employee => {
         obj.id = employee.getId();
         obj.email = employee.getEmail();
         obj.role = role;
-        obj.officeNumber = employee.getSchool();
+        obj.school = employee.getSchool();
         return obj;
     } else if (role === 'engineer') {
         let obj = {};
@@ -180,9 +180,6 @@ const employeeObj = employee => {
         return obj;
     }
 }
-
-
-// TODO: prompt HTML generation
 
 const welcomeMessage = () => {
 console.log(`
@@ -204,6 +201,9 @@ createManager()
 .then(html => {
     copyCSS();
     return createHTML(html);
+})
+.then(status => {
+    return console.log(status.message);
 })
 .catch(error => {
     console.log(error);

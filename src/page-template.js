@@ -22,14 +22,8 @@ const pageTemplate = teamArr => {
 }
 
 const pageGenerator = (manager, engineerArr, internArr) => {
-let engineerString = engineerArr.toString()
-let internString = internArr.toString();
-if (engineerArr.length > 1) {
-    engineerString.replace(',', '\n');
-}
-if (internArr.length > 1) {
-    internString.replace(',', '\n');
-}
+let engineerString = engineerArr.toString().replaceAll(',', '');
+let internString = internArr.toString().replaceAll(',', '');
 
 const page = `
 <!DOCTYPE html>
@@ -106,7 +100,7 @@ const internSection = obj => {
     <div class="card mt-2">
         <div class="card-body">
             <h2 class="card-title">${name}</h2>
-            <h3 class="card-subtitle">Engineer</h3>
+            <h3 class="card-subtitle">Intern</h3>
             <ul class="list-group">
                 <li class="list-group-item">Id: ${id}</li>
                 <li class="list-group-item"><a href="mailto: ${email}">Email</a></li>
